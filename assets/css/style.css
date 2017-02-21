@@ -1,5 +1,5 @@
 .hidden {
-	color: red;
+	visibility: hidden;
 }
 
 .revealed {
