@@ -16,7 +16,7 @@ var losses = 0;
 //Reset function for endgame or new word.
 var reset = function() {
 
-//Reset variables.
+	//Reset variables.
 	hangman.guess = "";
 
 	hangman.match = false;
@@ -50,10 +50,8 @@ var reset = function() {
 
 	//Empties previous letters/guesses/win/loss messages.
 	document.getElementById("letters").innerHTML = "";
-	hangman.wordMath();
-	hangman.guessMath();
-	document.getElementById("guessRemain").innerHTML = "Guesses: " + hangman.guessCount;
-	document.getElementById("badGuesses").innerHTML = "Previous Guesses: ";
+	document.getElementById("guessRemain").innerHTML = "Guesses left: " + hangman.guessCount;
+	document.getElementById("badGuesses").innerHTML = "Wrong letters: ";
 	document.getElementById("win").innerHTML = "";
 	document.getElementById("lose").innerHTML = "";
 
@@ -77,8 +75,8 @@ var reset = function() {
 	document.onkeyup = function(event) {
 		if (alphabet.indexOf(event.key.toUpperCase()) >= 0) {
 		hangman.gameGo();
-		}
-	}
+		};
+	};
 };
 
 //Game object.
@@ -108,7 +106,7 @@ var hangman = {
 
 	losses: 0,
 
-//Restricts key to alphabet. Sets initial false states for match and duplicate. 
+	//Restricts key to alphabet. Sets initial false states for match and duplicate. 
 	gameGo: function() {
 		this.guess = event.key.toUpperCase();
 		this.match = false;
@@ -142,13 +140,13 @@ var hangman = {
 			this.guessList.push(this.guess);
 			this.wrongList.push(this.guess);
 			this.guessMath();
-			document.getElementById("guessRemain").innerHTML = "Guesses: " + this.guessCount;
-			document.getElementById("badGuesses").innerHTML = "<div class='guessBox'>Previous guesses: " + this.wrongList + "</div>";
+			document.getElementById("guessRemain").innerHTML = "Guesses left: " + this.guessCount;
+			document.getElementById("badGuesses").innerHTML = "<div class='guessBox'>Wrong letters: " + this.wrongList + "</div>";
 		};
 
 		// If all letters are correctly guessed, plays song, animation, congratulates player, asks if they want to reset.
 		if (this.wordScore === wordLetters.length && this.wordScore !== 0) {
-			document.getElementById("win").innerHTML = "Congratulations! Press 'Reset' if you want to try another word.";
+			document.getElementById("win").innerHTML = "Stupdendous! Press the \"New Band\" button to keep playing.";
 			wins++;
 			document.getElementById("winsNum").innerHTML ="Wins: " + wins;
 			//Prevent more guesses.
@@ -157,9 +155,9 @@ var hangman = {
 			}
 		};
 
-		//If no guesses remain, game is over.
+		//If no guesses guessRemainin, game is over.
 		if (this.guessCount === 0) {
-			document.getElementById("lose").innerHTML = "The band was \"" + currentWord + "\". Bummer. Press 'Reset' and try again!";
+			document.getElementById("lose").innerHTML = "The band was \"" + currentWord + "\". Bummer. Press the \"New Band\" button and try again!";
 			losses++;
 			document.getElementById("loseNum").innerHTML ="Losses: " + losses;
 			//Prevent more guesses.

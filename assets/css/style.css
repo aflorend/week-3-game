@@ -1,15 +1,27 @@
+html,body {
+	height: 100%;
+}
+
 body {
 	text-align: center;
+	font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
 .jumbotron {
 	background: url("../images/guitar.jpg") no-repeat center center;
 	background-size: cover;
+	margin: 0;
+}
+
+.vertical-center {
 	display: flex;
 	align-items: center;
-	margin: 0;
-	height: 500px;
-	width: 100%;
+	height: 100%;
+}
+
+.content {
+	height: 100%;
+	min-height: 100%;
 }
 
 #guessRemain {
@@ -17,6 +29,7 @@ body {
 	font-size: 1.5em;
 	color: #993333;
 	text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+	letter-spacing: 2px;
 }
 
 #letters {
@@ -26,7 +39,8 @@ body {
 
 .letterBox {
 	display: inline-block;
-	margin: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
 	
 	font-family: 'Montserrat Subrayada', sans-serif;
 	font-size: 3em;
@@ -39,8 +53,20 @@ body {
 	font-size: 1.5em;
 	color: #993333;
 	text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+	letter-spacing: 2px;
+	margin-bottom: 50px;
+}
 
-	margin-bottom: 20px;
+#win, #lose {
+	position: absolute;
+	top: 40px;
+
+	height: 80px;
+	width: 100%;
+
+	font-size: 2em;
+	color: #000;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .footer {
