@@ -51,22 +51,20 @@ var reset = function() {
 	//Empties previous letters/guesses/win/loss messages.
 	document.getElementById("letters").innerHTML = "";
 	hangman.wordMath();
-	document.getElementById("correctGuesses").innerHTML = "Correct guesses: " + hangman.wordScore;
 	hangman.guessMath();
-	document.getElementById("guessRemain").innerHTML = "Remaining guesses: " + hangman.guessCount;
-	document.getElementById("badGuesses").innerHTML = "<div class='guessBox'>" + hangman.wrongList + "</div>";
-	document.getElementById("badGuesses").innerHTML = "";
+	document.getElementById("guessRemain").innerHTML = "Guesses: " + hangman.guessCount;
+	document.getElementById("badGuesses").innerHTML = "Previous Guesses: ";
 	document.getElementById("win").innerHTML = "";
 	document.getElementById("lose").innerHTML = "";
 
-	//Insert each letter from the current word into the page and sets initial styling to be hidden.
+	//Insert each letter from the current word into the page and sets initial character to underscores to hide them.
 	var lettersPrint = function() {
 		for (i = 0; i < wordLetters.length; i++) {
-			document.getElementById("letters").innerHTML += "<div class='letterBorder'><div class='letterBox hidden' id='letterNum" + i + "'>" + wordLetters[i] + "</div></div>";
+			document.getElementById("letters").innerHTML += "<div class='letterBox' id='letterNum" + i + "'>_</div>";
 			//Reveals spaces.
 			if (wordLetters[i] === " ") {
-				document.getElementById("letterNum" + i).className = "letterBox revealed";
-				hangman.correctList.push(wordLetters[i]);
+				document.getElementById("letterNum" + i).innerHTML = " ";
+				hangman.correctList.push(" ");
 			};
 		};
 	};
@@ -130,13 +128,12 @@ var hangman = {
 			//If statement to find matches between non-duplicate guess and current word.
 			if (this.guess === wordLetters[i] && this.duplicateGuess === false) {
 
-				//Removes hidden class, adds revealed class, updates word score.
+				//Replaces underscore with correctly guessed character, updates word score.
 				this.match = true;
 				this.guessList.push(this.guess);
 				this.correctList.push(this.guess);
-				document.getElementById("letterNum" + i).className = "letterBox revealed";
+				document.getElementById("letterNum" + i).innerHTML = wordLetters[i];
 				this.wordMath();
-				document.getElementById("correctGuesses").innerHTML = "Correct guesses: " + this.wordScore;
 				};
 			};
 
@@ -145,8 +142,8 @@ var hangman = {
 			this.guessList.push(this.guess);
 			this.wrongList.push(this.guess);
 			this.guessMath();
-			document.getElementById("guessRemain").innerHTML = "Remaining guesses: " + this.guessCount;
-			document.getElementById("badGuesses").innerHTML = "<div class='guessBox'>" + this.wrongList + "</div>";
+			document.getElementById("guessRemain").innerHTML = "Guesses: " + this.guessCount;
+			document.getElementById("badGuesses").innerHTML = "<div class='guessBox'>Previous guesses: " + this.wrongList + "</div>";
 		};
 
 		// If all letters are correctly guessed, plays song, animation, congratulates player, asks if they want to reset.
@@ -162,7 +159,7 @@ var hangman = {
 
 		//If no guesses remain, game is over.
 		if (this.guessCount === 0) {
-			document.getElementById("lose").innerHTML = "Sorry! The word was \"" + currentWord + "\". You don't have any more guesses. Press 'Reset' and try again!";
+			document.getElementById("lose").innerHTML = "The band was \"" + currentWord + "\". Bummer. Press 'Reset' and try again!";
 			losses++;
 			document.getElementById("loseNum").innerHTML ="Losses: " + losses;
 			//Prevent more guesses.

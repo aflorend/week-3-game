@@ -1,31 +1,61 @@
 body {
-	font-family: Helvetica, sans-serif;
-	font-size: 5em;
-}
-
-.hidden {
-	margin: 2px;
-	visibility: hidden;
-}
-
-.letterBorder {
-	margin: 2px;
-	display: inline-block;
-	height: 80px;
-	width: 80px;
-	border-bottom: 4px solid blue;
-}
-
-.revealed {
 	text-align: center;
-	margin: 2px;
-	display: inline-block;
-	color: white;
-	height: 80px;
-	width: 80px;
-	background-color: blue;
 }
 
-#reset {
+.jumbotron {
+	background: url("../images/guitar.jpg") no-repeat center center;
+	background-size: cover;
+	display: flex;
+	align-items: center;
+	margin: 0;
+	height: 500px;
+	width: 100%;
+}
 
+#guessRemain {
+	font-family: 'Permanent Marker', cursive;
+	font-size: 1.5em;
+	color: #993333;
+	text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+}
+
+#letters {
+	margin-top: 60px;
+	margin-bottom: 60px;
+}
+
+.letterBox {
+	display: inline-block;
+	margin: 10px;
+	
+	font-family: 'Montserrat Subrayada', sans-serif;
+	font-size: 3em;
+	color: #000;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+#badGuesses {
+	font-family: 'Permanent Marker', cursive;
+	font-size: 1.5em;
+	color: #993333;
+	text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+
+	margin-bottom: 20px;
+}
+
+.footer {
+	background-color: #993333;
+	height: 60px;
+	display: flex;
+	align-items: center;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
+
+.footer li {
+	display: inline-block;
+	margin-right: 60px;
+
+	color: #fff;
 }
