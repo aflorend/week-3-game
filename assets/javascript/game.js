@@ -1,112 +1,181 @@
-var alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+var alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 
-var wordBank = "definition,column,assessment,gradient,midnight,fresh,cathedral,behavior,root,anger,consumer,player,small,wording,petty,sandwich,oven,profound,mushroom,disability,shape,kneel,fast,ring,waste,pipe,extract,beautiful,merit,economics,stab,quarrel,noise,public,repetition,dilemma,real,copy,hierarchy,concrete,inflation,mutation,confession,collapse,tablet,cut,sensitive,size,light,gold,strong,headline,essential,perfume,fool around,access,belief,sofa,agriculture,explicit,struggle,settle,calm,spider,replace,heat,productive,series,appearance,wound,plain,appeal,fashion,snuggle,basic,arrangement,fold,triangle,pen,genetic,advocate,research,integrity,post,maze,surgeon,bus,halt,citizen,message,snarl,order,loose,oppose,flexible,timber,customer,mile,conclusion,reconcile";
+var wordBank = "Mac Demarco,Bon Iver,Grimes,Tame Impala,Sufjan Stevens,Sleater Kinney,Father John Misty,Caribou,Spoon,Real Estate,Arcade Fire,LCD Soundsystem,Animal Collective";
 
 var wordList = [];
 
-var wordLetters = [];
-
 var currentWord = "";
 
-var guess = "";
-
-var match = false;
-
-var duplicateGuess = false;
-
-var guessList = [];
-
-var correctList = [];
-
-var wrongList = [];
-
-var wordScore = 0;
-
-function wordMath() {wordScore = correctList.length};
-
-var guessCount = 15;
-
-function guessMath() {guessCount = 15 - wrongList.length;};
+var wordLetters = [];
 
 var wins = 0;
 
 var losses = 0;
 
-//Separate words into an array from a large, single string of comma separated words.
-function wordBankSplit() {
-	wordList = wordBank.split(",");
-};
+//Reset function for endgame or new word.
+var reset = function() {
 
-//Generate random word from word list and make lower case.
-function wordGen() {
-	currentWord = wordList[Math.floor(Math.random() * wordList.length)].toLowerCase();
-};
+//Reset variables.
+	hangman.guess = "";
 
-//Split current word into letters.
-function wordSplit() {
-	wordLetters = currentWord.split("");
-};
+	hangman.match = false;
 
-//Insert each letter from the current word into the page and set initial styling to be hidden.
-function lettersPrint() {
-	for (i = 0; i < wordLetters.length; i++) {
-		document.getElementById("letters").innerHTML += "<div class='letterBox hidden' id='letterNum" + i + "'>" + wordLetters[i] + "</div>";
+	hangman.duplicateGuess = false;
+
+	hangman.guessList = [];
+
+	hangman.correctList = [];
+
+	hangman.wrongList = [];
+
+	hangman.wordScore = 0;
+
+	hangman.guessCount = 15;
+
+	//Separate words into an array from a large, single string of comma separated words.	
+	var wordBankSplit = function() {
+			wordList = wordBank.split(",");
+		};
+
+	//Generate random word from word list and make lower case.
+	var wordGen = function() {
+		currentWord = wordList[Math.floor(Math.random() * wordList.length)];
 	};
+
+	//Split current word into letters.
+	var wordSplit = function() {
+		wordLetters = currentWord.toUpperCase().split("");
+	};
+
+	//Empties previous letters/guesses/win/loss messages.
+	document.getElementById("letters").innerHTML = "";
+	hangman.wordMath();
+	document.getElementById("correctGuesses").innerHTML = "Correct guesses: " + hangman.wordScore;
+	hangman.guessMath();
+	document.getElementById("guessRemain").innerHTML = "Remaining guesses: " + hangman.guessCount;
+	document.getElementById("badGuesses").innerHTML = "<div class='guessBox'>" + hangman.wrongList + "</div>";
+	document.getElementById("badGuesses").innerHTML = "";
+	document.getElementById("win").innerHTML = "";
+	document.getElementById("lose").innerHTML = "";
+
+	//Insert each letter from the current word into the page and set initial styling to be hidden.
+	var lettersPrint = function() {
+		for (i = 0; i < wordLetters.length; i++) {
+			document.getElementById("letters").innerHTML += "<div class='letterBorder'><div class='letterBox hidden' id='letterNum" + i + "'>" + wordLetters[i] + "</div></div>";
+			//Reveals spaces.
+			if (wordLetters[i] === " ") {
+				document.getElementById("letterNum" + i).className = "letterBox revealed";
+				hangman.correctList.push(wordLetters[i]);
+			};
+		};
+	};
+		wordBankSplit();
+		wordGen();
+		wordSplit();
+		lettersPrint();
+
+	//Restarts event listener.
+	document.onkeyup = function(event) {
+		if (alphabet.indexOf(event.key.toUpperCase()) >= 0) {
+		hangman.gameGo();
+		}
+	}
 };
 
-//Event listener for user key. Restricts key to alphabet. Sets initial false states for match and duplicate.
+var hangman = {
+
+	guess: "",
+
+	match: false,
+
+	duplicateGuess: false,
+
+	guessList: [],
+
+	correctList: [],
+
+	wrongList: [],
+
+	wordScore: 0,
+
+	wordMath: function() {this.wordScore = this.correctList.length},
+
+	guessCount: 15,
+
+	guessMath: function() {this.guessCount = 15 - this.wrongList.length},
+
+	wins: 0,
+
+	losses: 0,
+
+//Restricts key to alphabet. Sets initial false states for match and duplicate. 
+	gameGo: function() {
+		this.guess = event.key.toUpperCase();
+		this.match = false;
+		this.duplicateGuess = false;
+
+		//First, check for non-empty array, then compare previous responses to ensure no duplicate guesses.
+		if (this.guessList.length < 1) {
+			this.duplicateGuess = false;
+		}
+		else if (this.guessList.indexOf(this.guess) >= 0) {
+			this.duplicateGuess = true;
+		};
+
+		//Looping to compare guess to letters in current word.
+		for (i = 0; i < wordLetters.length; i++) {
+
+			//If statement to find matches between non-duplicate guess and current word.
+			if (this.guess === wordLetters[i] && this.duplicateGuess === false) {
+
+				//Removes hidden class, adds revealed class, updates word score.
+				this.match = true;
+				this.guessList.push(this.guess);
+				this.correctList.push(this.guess);
+				document.getElementById("letterNum" + i).className = "letterBox revealed";
+				this.wordMath();
+				document.getElementById("correctGuesses").innerHTML = "Correct guesses: " + this.wordScore;
+				};
+			};
+
+		//If no matches found, add to wrong list and update guess count.
+		if (this.duplicateGuess === false && this.match === false) {
+			this.guessList.push(this.guess);
+			this.wrongList.push(this.guess);
+			this.guessMath();
+			document.getElementById("guessRemain").innerHTML = "Remaining guesses: " + this.guessCount;
+			document.getElementById("badGuesses").innerHTML = "<div class='guessBox'>" + this.wrongList + "</div>";
+		};
+
+		// If all letters are correctly guessed, plays song, animation, congratulates player, asks if they want to reset.
+		if (this.wordScore === wordLetters.length && this.wordScore !== 0) {
+			document.getElementById("win").innerHTML = "Congratulations! Press 'Reset' if you want to try another word.";
+			wins++;
+			document.getElementById("winsNum").innerHTML ="Wins: " + wins;
+			//Prevent more guesses.
+			document.onkeyup = function (event) {
+ 		    return false;
+			}
+		}
+
+		//If no guesses remain, game is over.
+		if (this.guessCount === 0) {
+			document.getElementById("lose").innerHTML = "Sorry! The word was \"" + currentWord + "\". You don't have any more guesses. Press 'Reset' and try again!";
+			losses++;
+			document.getElementById("loseNum").innerHTML ="Losses: " + losses;
+			//Prevent more guesses.
+			document.onkeyup = function (event) {
+ 		    return false;
+			}
+		}
+	}
+}
+
+//Event listener for user key, restricts to letters. Starts game function inside of hangman object.
 document.onkeyup = function(event) {
-	if (alphabet.indexOf(event.key.toLowerCase()) >= 0) {
-		guess = event.key.toLowerCase();
-		match = false;
-		duplicateGuess = false;
+	if (alphabet.indexOf(event.key.toUpperCase()) >= 0) {
+		hangman.gameGo();
 	}
+}
 
-//First, check non-empty array and the previous responses to ensure there are no duplicate guesses.
-	if (guessList.length < 1) {
-		duplicateGuess = false;
-	}
-	else if (guessList.indexOf(guess) >= 0) {
-		duplicateGuess = true;
-	};
-
-//Looping to compare guess to letters in current word.
-	for (i = 0; i < wordLetters.length; i++) {
-
-//If statement to find matches between non-duplicate guess and current word.
-		if (guess === wordLetters[i] && duplicateGuess === false) {
-
-//Removes hidden class, adds revealed class, updates word score.
-			match = true;
-			guessList.push(guess);
-			correctList.push(guess);
-			document.getElementById("letterNum" + i).className = "letterBox revealed";
-			wordMath();
-			document.getElementById("correctGuesses").innerHTML = "Correct guesses: " + wordScore;
-		};
-	};
-
-//If no matches found, add to wrong list and update guess count.
-		if (duplicateGuess === false && match === false) {
-			guessList.push(guess);
-			wrongList.push(guess);
-			guessMath();
-			document.getElementById("guessRemain").innerHTML = "Remaining guesses: " + guessCount;
-			document.getElementById("badGuesses").innerHTML = "<div class='guessBox'>" + wrongList + "</div>";
-		};
-
-// If all letters are correctly guessed, plays song, animation, congratulates player, asks if they want to reset.
-	if (wordScore === wordLetters.length && wordScore !== 0) {
-		document.getElementById("win").innerHTML = "Congratulations! Press 'Reset' if you want to try another word.";
-	};
-
-//If no guesses remain, game is over.
-	if (guessCount === 0) {
-		document.getElementById("lose").innerHTML = "Sorry! You don't have any more guesses. Press 'Reset' and try again!";
-	}
-};
-
-wordBankSplit();
-wordGen();
-wordSplit();
-lettersPrint();
+reset();
