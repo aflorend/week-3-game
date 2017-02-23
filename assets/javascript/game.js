@@ -1,3 +1,4 @@
+//Declaring variables.
 var alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 
 var wordBank = "Mac Demarco,Bon Iver,Grimes,Tame Impala,Sufjan Stevens,Sleater Kinney,Father John Misty,Caribou,Spoon,Real Estate,Arcade Fire,LCD Soundsystem,Animal Collective";
@@ -58,7 +59,7 @@ var reset = function() {
 	document.getElementById("win").innerHTML = "";
 	document.getElementById("lose").innerHTML = "";
 
-	//Insert each letter from the current word into the page and set initial styling to be hidden.
+	//Insert each letter from the current word into the page and sets initial styling to be hidden.
 	var lettersPrint = function() {
 		for (i = 0; i < wordLetters.length; i++) {
 			document.getElementById("letters").innerHTML += "<div class='letterBorder'><div class='letterBox hidden' id='letterNum" + i + "'>" + wordLetters[i] + "</div></div>";
@@ -74,7 +75,7 @@ var reset = function() {
 		wordSplit();
 		lettersPrint();
 
-	//Restarts event listener.
+	//Restarts event listener that was turned off after winning or losing.
 	document.onkeyup = function(event) {
 		if (alphabet.indexOf(event.key.toUpperCase()) >= 0) {
 		hangman.gameGo();
@@ -82,6 +83,7 @@ var reset = function() {
 	}
 };
 
+//Game object.
 var hangman = {
 
 	guess: "",
@@ -156,7 +158,7 @@ var hangman = {
 			document.onkeyup = function (event) {
  		    return false;
 			}
-		}
+		};
 
 		//If no guesses remain, game is over.
 		if (this.guessCount === 0) {
@@ -167,15 +169,15 @@ var hangman = {
 			document.onkeyup = function (event) {
  		    return false;
 			}
-		}
+		};
 	}
-}
+};
 
 //Event listener for user key, restricts to letters. Starts game function inside of hangman object.
 document.onkeyup = function(event) {
 	if (alphabet.indexOf(event.key.toUpperCase()) >= 0) {
 		hangman.gameGo();
-	}
-}
+	};
+};
 
 reset();
